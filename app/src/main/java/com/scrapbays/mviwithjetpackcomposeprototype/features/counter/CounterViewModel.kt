@@ -6,21 +6,22 @@ import com.scrapbays.mviwithjetpackcomposeprototype.models.IModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
-class CounterViewModel : ViewModel(), IModel<CounterState, CounterEvent, CounterEffect> {
+class CounterViewModel : ViewModel(), IModel<CounterContract.CounterState, CounterContract.CounterEvent, CounterContract.CounterEffect> {
 
-    override val intents: Channel<CounterEvent> = Channel(Channel.UNLIMITED)
+    override val intents: Channel<CounterContract.CounterEvent> = Channel(Channel.UNLIMITED)
 
-    private val _effects: Channel<CounterEffect> = Channel()
-    override val effects: Flow<CounterEffect>
+    private val _effects: Channel<CounterContract.CounterEffect> = Channel()
+    override val effects: Flow<CounterContract.CounterEffect>
         get() = _effects.receiveAsFlow()
 
-    private val _state = MutableStateFlow(CounterState())
-    override val state: Flow<CounterState>
+    private val _state = MutableStateFlow(CounterContract.CounterState())
+    override val state: StateFlow<CounterContract.CounterState>
         get() = _state
 
     init {
@@ -31,9 +32,9 @@ class CounterViewModel : ViewModel(), IModel<CounterState, CounterEvent, Counter
         viewModelScope.launch {
             intents.consumeAsFlow().collect { counterIntent ->
                 when (counterIntent) {
-                    CounterEvent.Decrease -> setCount(_state.value.count - 1)
-                    CounterEvent.Increase -> setCount(_state.value.count + 1)
-                    CounterEvent.NavigateToSecondScreen -> setNavigationToSecondScreenInEffects()
+                    CounterContract.CounterEvent.Decrease -> setCount(_state.value.count - 1)
+                    CounterContract.CounterEvent.Increase -> setCount(_state.value.count + 1)
+                    CounterContract.CounterEvent.NavigateToSecondScreen -> setNavigationToSecondScreenInEffects()
                 }
             }
         }
@@ -41,7 +42,7 @@ class CounterViewModel : ViewModel(), IModel<CounterState, CounterEvent, Counter
 
     private fun setNavigationToSecondScreenInEffects() {
         viewModelScope.launch {
-            _effects.send(CounterEffect.NavigateToSecondScreen)
+            _effects.send(CounterContract.CounterEffect.Navigation.ToAboutScreen)
         }
     }
 
