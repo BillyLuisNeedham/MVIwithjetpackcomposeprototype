@@ -1,5 +1,7 @@
 package com.scrapbays.mviwithjetpackcomposeprototype.features.counter
 
-sealed class CounterEffect {
-    object NavigateToSecondScreen : CounterEffect()
+import com.scrapbays.mviwithjetpackcomposeprototype.models.IEffect
+
+sealed class CounterEffect: IEffect {
+    object NavigateToSecondScreen: CounterEffect()
 }
