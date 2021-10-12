@@ -11,9 +11,9 @@ import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
-class CounterViewModel : ViewModel(), IModel<CounterState, CounterIntent, CounterEffect> {
+class CounterViewModel : ViewModel(), IModel<CounterState, CounterEvent, CounterEffect> {
 
-    override val intents: Channel<CounterIntent> = Channel(Channel.UNLIMITED)
+    override val intents: Channel<CounterEvent> = Channel(Channel.UNLIMITED)
 
     private val _effects: Channel<CounterEffect> = Channel()
     override val effects: Flow<CounterEffect>
@@ -31,9 +31,9 @@ class CounterViewModel : ViewModel(), IModel<CounterState, CounterIntent, Counte
         viewModelScope.launch {
             intents.consumeAsFlow().collect { counterIntent ->
                 when (counterIntent) {
-                    CounterIntent.Decrease -> setCount(_state.value.count - 1)
-                    CounterIntent.Increase -> setCount(_state.value.count + 1)
-                    CounterIntent.NavigateToSecondScreen -> setNavigationToSecondScreenInEffects()
+                    CounterEvent.Decrease -> setCount(_state.value.count - 1)
+                    CounterEvent.Increase -> setCount(_state.value.count + 1)
+                    CounterEvent.NavigateToSecondScreen -> setNavigationToSecondScreenInEffects()
                 }
             }
         }
