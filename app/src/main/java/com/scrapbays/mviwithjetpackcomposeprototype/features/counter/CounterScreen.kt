@@ -1,6 +1,7 @@
 package com.scrapbays.mviwithjetpackcomposeprototype.features.counter
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,6 +32,9 @@ fun CounterScreen(
     onAddClicked: () -> Unit,
     onMinusClicked: () -> Unit,
 ) {
+    // TODO remove when done testing
+    Log.d("billytest", "count in component: ${state.count}")
+
     val context = LocalContext.current
     LaunchedEffect(effectFlow) {
         effectFlow?.collect { effect ->

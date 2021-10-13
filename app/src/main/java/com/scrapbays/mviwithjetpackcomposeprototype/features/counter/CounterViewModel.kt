@@ -1,5 +1,6 @@
 package com.scrapbays.mviwithjetpackcomposeprototype.features.counter
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.scrapbays.mviwithjetpackcomposeprototype.models.IModel
@@ -47,6 +48,9 @@ class CounterViewModel : ViewModel(), IModel<CounterContract.CounterState, Count
     }
 
     private fun setCount(count: Int) {
+        // TODO remove when done testing
+        Log.d("billytest", "setCount fired with: $count")
+
         _state.value = _state.value.copy(
             count = count
         )
