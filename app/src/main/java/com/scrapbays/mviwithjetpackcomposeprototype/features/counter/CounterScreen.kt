@@ -14,6 +14,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,10 +32,8 @@ fun CounterScreen(
     effectFlow: Flow<CounterContract.CounterEffect>?,
     onAddClicked: () -> Unit,
     onMinusClicked: () -> Unit,
+    onNameChanged: (String) -> Unit,
 ) {
-    // TODO remove when done testing
-    Log.d("billytest", "count in component: ${state.count}")
-
     val context = LocalContext.current
     LaunchedEffect(effectFlow) {
         effectFlow?.collect { effect ->
@@ -63,6 +62,7 @@ fun CounterScreen(
             state = state,
             onAddClicked = onAddClicked,
             onMinusClicked = onMinusClicked,
+            onNameChanged = onNameChanged
         )
     }
 }
@@ -77,13 +77,18 @@ fun CounterScreenContent(
     modifier: Modifier = Modifier,
     state: CounterContract.CounterState,
     onAddClicked: () -> Unit,
-    onMinusClicked: () -> Unit
+    onMinusClicked: () -> Unit,
+    onNameChanged: (String) -> Unit
 ) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        Text(
+            text = "Hello ${state.name}",
+            style = MaterialTheme.typography.h4
+        )
         Text(
             text = state.count.toString(),
             style = MaterialTheme.typography.h5
@@ -101,5 +106,9 @@ fun CounterScreenContent(
                 Text("Minus")
             }
         }
+        TextField(
+            value = state.name,
+            onValueChange = onNameChanged
+        )
     }
 }

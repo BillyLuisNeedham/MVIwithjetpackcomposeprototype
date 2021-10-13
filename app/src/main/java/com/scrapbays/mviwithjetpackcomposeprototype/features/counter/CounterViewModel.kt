@@ -1,6 +1,5 @@
 package com.scrapbays.mviwithjetpackcomposeprototype.features.counter
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.scrapbays.mviwithjetpackcomposeprototype.models.IModel
@@ -13,7 +12,8 @@ import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
-class CounterViewModel : ViewModel(), IModel<CounterContract.CounterState, CounterContract.CounterEvent, CounterContract.CounterEffect> {
+class CounterViewModel : ViewModel(),
+    IModel<CounterContract.CounterState, CounterContract.CounterEvent, CounterContract.CounterEffect> {
 
     override val intents: Channel<CounterContract.CounterEvent> = Channel(Channel.UNLIMITED)
 
@@ -36,9 +36,16 @@ class CounterViewModel : ViewModel(), IModel<CounterContract.CounterState, Count
                     CounterContract.CounterEvent.Decrease -> setCount(_state.value.count - 1)
                     CounterContract.CounterEvent.Increase -> setCount(_state.value.count + 1)
                     CounterContract.CounterEvent.NavigateToSecondScreen -> setNavigationToSecondScreenInEffects()
+                    is CounterContract.CounterEvent.Name -> setName(counterIntent.name)
                 }
             }
         }
+    }
+
+    private fun setName(name: String) {
+        _state.value = _state.value.copy(
+            name = name
+        )
     }
 
     private fun setNavigationToSecondScreenInEffects() {
@@ -48,9 +55,6 @@ class CounterViewModel : ViewModel(), IModel<CounterContract.CounterState, Count
     }
 
     private fun setCount(count: Int) {
-        // TODO remove when done testing
-        Log.d("billytest", "setCount fired with: $count")
-
         _state.value = _state.value.copy(
             count = count
         )

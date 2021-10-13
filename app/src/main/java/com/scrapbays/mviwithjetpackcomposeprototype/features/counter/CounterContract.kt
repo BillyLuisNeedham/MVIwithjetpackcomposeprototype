@@ -9,10 +9,12 @@ class CounterContract {
         object Increase: CounterEvent()
         object Decrease: CounterEvent()
         object NavigateToSecondScreen: CounterEvent()
+        data class Name(val name: String): CounterEvent()
     }
 
     data class CounterState(
         val count: Int = 0,
+        val name: String = "",
         val isLoading: Boolean = false,
         val errorMessage: String? = null
     ): IState
