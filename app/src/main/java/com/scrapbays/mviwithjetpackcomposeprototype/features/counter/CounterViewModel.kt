@@ -33,12 +33,20 @@ class CounterViewModel : ViewModel(),
         viewModelScope.launch {
             intents.consumeAsFlow().collect { counterIntent ->
                 when (counterIntent) {
-                    CounterContract.CounterEvent.Decrease -> setCount(_state.value.count - 1)
-                    CounterContract.CounterEvent.Increase -> setCount(_state.value.count + 1)
-                    CounterContract.CounterEvent.NavigateToSecondScreen -> setNavigationToSecondScreenInEffects()
+                    CounterContract.CounterEvent.Decrease -> setCountHandler(_state.value.count - 1)
+                    CounterContract.CounterEvent.Increase -> setCountHandler(_state.value.count + 1)
+                    CounterContract.CounterEvent.NavigateToSecondScreen -> sendNavigationToSecondScreenEffect()
                     is CounterContract.CounterEvent.Name -> setName(counterIntent.name)
                 }
             }
+        }
+    }
+
+    private fun setCountHandler(count: Int) {
+        when {
+            count < 0 -> sendDisplayToastEffect()
+            count > 10 -> sendNavigationToSecondScreenEffect()
+            else -> setCount(count = count)
         }
     }
 
@@ -48,9 +56,15 @@ class CounterViewModel : ViewModel(),
         )
     }
 
-    private fun setNavigationToSecondScreenInEffects() {
+    private fun sendNavigationToSecondScreenEffect() {
         viewModelScope.launch {
             _effects.send(CounterContract.CounterEffect.Navigation.ToAboutScreen)
+        }
+    }
+
+    private fun sendDisplayToastEffect() {
+        viewModelScope.launch {
+            _effects.send(CounterContract.CounterEffect.DisplayToast("Can't go below zero"))
         }
     }
 

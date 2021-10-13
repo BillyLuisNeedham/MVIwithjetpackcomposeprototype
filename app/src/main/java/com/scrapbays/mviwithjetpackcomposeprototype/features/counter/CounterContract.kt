@@ -20,7 +20,7 @@ class CounterContract {
     ): IState
 
     sealed class CounterEffect: IEffect {
-        object DisplayToast: CounterEffect()
+        data class DisplayToast(val message: String): CounterEffect()
 
         sealed class Navigation: CounterEffect() {
             object ToAboutScreen: Navigation()

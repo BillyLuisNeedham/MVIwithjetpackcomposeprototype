@@ -1,7 +1,6 @@
 package com.scrapbays.mviwithjetpackcomposeprototype.features.counter
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,7 +23,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onEach
 
 @Composable
 fun CounterScreen(
@@ -38,8 +36,8 @@ fun CounterScreen(
     LaunchedEffect(effectFlow) {
         effectFlow?.collect { effect ->
             when (effect) {
-                CounterContract.CounterEffect.DisplayToast -> showToast(
-                    message = "Can't go below zero",
+                is CounterContract.CounterEffect.DisplayToast -> showToast(
+                    message = effect.message,
                     context = context
                 )
                 CounterContract.CounterEffect.Navigation.ToAboutScreen -> showToast(
