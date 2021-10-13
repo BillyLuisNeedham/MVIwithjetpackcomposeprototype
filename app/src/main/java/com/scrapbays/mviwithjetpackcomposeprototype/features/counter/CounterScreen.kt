@@ -97,14 +97,14 @@ fun CounterScreenContent(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
-
-            Button(onClick = onAddClicked) {
-                Text("Plus")
-            }
-            Spacer(modifier = Modifier.width(8.dp))
             Button(onClick = onMinusClicked) {
                 Text("Minus")
             }
+            Spacer(modifier = Modifier.width(8.dp))
+            Button(onClick = onAddClicked) {
+                Text("Plus")
+            }
+
         }
         TextField(
             value = state.name,
